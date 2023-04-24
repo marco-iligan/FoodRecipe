@@ -68,6 +68,8 @@ public abstract class RepositoryBase {
 				prepStatement.setBoolean(paramIndex, (boolean)param);
 			}else if(param.getClass() == Date.class) {
 				prepStatement.setDate(paramIndex, (Date)param);
+			}else if(param.getClass() == Long.class) {
+				prepStatement.setLong(paramIndex, (long)param);
 			}
 		}
 	}
@@ -88,6 +90,8 @@ public abstract class RepositoryBase {
 				callStatement.setBoolean(paramIndex, (boolean)param);
 			}else if(param.getClass() == Date.class) {
 				callStatement.setDate(paramIndex, (Date)param);
+			}else if(param.getClass() == Long.class) {
+				callStatement.setLong(paramIndex, (long)param);
 			}
 		}
 	}

@@ -28,12 +28,13 @@ public class AuthenticationService {
 	}
 	
 	public AuthenticationResponse authenticate(AuthenticationRequest request) throws Exception {
+		AuthenticationResponse response = null;
 		User user = repo.findByUsername(request.getUsername());
 		if(user != null && user.getPassword().equals(AES.encrypt(request.getPassword()))) {
-			AuthenticationResponse response = new AuthenticationResponse(user.getUserId(),user.getFirstname());
+			response = new AuthenticationResponse(user.getUserId(),user.getFirstname()+" "+user.getLastname());
 			return response;
 		}
-		return null;
+		return response;
 	}
 
 }

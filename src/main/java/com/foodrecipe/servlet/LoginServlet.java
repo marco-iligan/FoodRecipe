@@ -1,13 +1,14 @@
 package com.foodrecipe.servlet;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.foodrecipe.service.AuthenticationService;
 import com.foodrecipe.dto.AuthenticationRequest;
@@ -24,20 +25,22 @@ public class LoginServlet extends HttpServlet {
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
 		AuthenticationRequest authRequest = new AuthenticationRequest(username,password);
-		PrintWriter out = response.getWriter();
-		
+		HttpSession session = request.getSession();
+		RequestDispatcher dispatcher = null;
 		try {
 			AuthenticationService service = new AuthenticationService();
 			AuthenticationResponse authResponse = service.authenticate(authRequest);
 			if(authResponse!=null) {
-				out.print(authResponse.getUserId());
-				request.setAttribute("id", authResponse.getUserId());
-				request.setAttribute("name", authResponse.getFirstname());
-				request.setAttribute("status", "success");
+				session.setAttribute("id", authResponse.getUserId());
+				session.setAttribute("name", authResponse.getFirstname());
+				session.setAttribute("status", "success");
+				dispatcher = request.getRequestDispatcher("index.jsp");
 				
 			}else {
 				request.setAttribute("status", "failed");
+				dispatcher = request.getRequestDispatcher("login.jsp");
 			}
+			dispatcher.forward(request, response);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
